@@ -1,0 +1,7 @@
+django
+jingo
+south
+django-staticfiles-jquery
+django-staticfiles-bootstrap
+django-browserid
+django-braces

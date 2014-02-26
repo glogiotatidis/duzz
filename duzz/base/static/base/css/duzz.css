@@ -1,0 +1,61 @@
+body {
+  padding-top: 50px;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.red {
+    color: red;
+}
+
+#browserid-button {
+  padding-top: 12px;
+}
+
+.tc-item {
+    min-height: 70px;
+    cursor: default;
+}
+
+.tc-item:hover {
+    background-color: #efefef;
+}
+
+.tc-item img {
+    width: 48px;
+    height: 48px;
+    float: left;
+    margin-right: 10px;
+    border-radius: 30px;
+}
+
+.tc-item #creator {
+    font-weight: bold;
+}
+.tc-item #body {
+    padding-top: 2px;
+}
+
+.tc-item #datetime {
+    color: #ccc;
+    font-size: 90%;
+}
+
+.item-link {
+    color: black;
+    text-decoration: none;
+}
+
+.item-link:hover {
+    text-decoration: none;
+}
+
+#new-topic-button-container {
+    float: right;
+}
+
+#new-topic-form {
+    display: none;
+}

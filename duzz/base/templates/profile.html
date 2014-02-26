@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block maincontent %}
+<h1>Profile</h1>
+
+<form id="comment-form" method="POST" role="form">
+  {{ csrf() }}
+
+  <div class="form-group">
+    <label for="id_full_name">{{ form.full_name.label }}</label>
+    {{ field_with_attrs(form.full_name, placeholder="Νίκος Κούκος",
+                        size="60",
+                        required="true", class="form-control") }}
+  </div>
+
+  <div class="align-right">
+    <input id="id_submit" type="submit" class="btn btn-success" value="Save">
+  </div>
+</form>
+
+
+{% endblock %}

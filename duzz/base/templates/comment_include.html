@@ -1,0 +1,11 @@
+{% for comment in comments %}
+  <li class="list-group-item tc-item comment-item" data-id="{{ comment.id }}">
+    <img id="avatar" src="{{ comment.creator.get_avatar_url() }}">
+    <div class="pull-right">#{{ loop.index }}</div>
+    <div id="creator">
+      {{ comment.creator.full_name|default(comment.creator.email, true) }}
+      <span id="datetime">on {{ comment.created.strftime('%d/%M/%Y') }}</span>
+    </div>
+    <div id="body">{{ comment.text }}</div>
+  </li>
+{% endfor %}
