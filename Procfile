@@ -1,0 +1,1 @@
+web: uwsgi hellodjango.wsgi
