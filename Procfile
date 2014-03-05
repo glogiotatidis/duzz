@@ -1,1 +1,1 @@
-web: uwsgi hellodjango.wsgi
+web: uwsgi duzz.wsgi
