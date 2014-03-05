@@ -1,7 +1,5 @@
 django
-jingo
 south
-django-staticfiles-jquery
-django-staticfiles-bootstrap
 django-browserid
 django-braces
+-e git+https://github.com/mariocesar/sorl-thumbnail#egg=sorl-thumbnail

@@ -2,3 +2,4 @@
 .ropeproject
 *.db
 /static
+/media

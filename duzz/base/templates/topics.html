@@ -1,54 +1,58 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load thumbnail %}
 
-{% block extrajs %}
-<script src="{{ static('base/js/topics.js') }}"></script>
-{% endblock %}
+{% block main_title %}
+  Λίστα με τρόμπες
+{% endblock main_title %}
+{% block active_menu_item %}menu-list{% endblock active_menu_item %}
 
-{% block maincontent %}
-<span id="new-topic-button-container">
-  <a href="#" id="new-topic-button" class="btn btn-primary btn-sm">New Topic</a>
-</span>
-
-<h1>Topics</h1>
-
-<div id="new-topic-form">
-  <form id="topic-form" action="{{ url('topic_add') }}" method="POST" role="form">
-    {{ csrf() }}
-
-    <div class="form-group">
-      {{ field_with_attrs(topic_form.subject, placeholder="Τίτλος",
-                          required="true", class="form-control") }}
-
+{% block main_content %}
+  <div class="row whitebg">
+    <div class="large-12 columns topbottom-padding">
+      <ul id="trompa-listing" class="no-bullet">
+        {% for topic in topics %}
+        <a href="{{ topic.get_absolute_url }}">
+          <li>
+            {% thumbnail topic.creator.avatar "70x70" crop="center" formatb="PNG" quality=99 as im %}
+              <img class="avatar" src="{{ im.url }}">
+            {% endthumbnail %}
+            <h4>{{ topic.subject }}</h4>
+            <span class="detail hide-for-small">
+              {{ topic.creator.full_name }} | 
+              Τελευταία ανανέωση: {{ topic.updated }} | 
+              {{ topic.comments.count }} απαντήσεις
+            </span>
+            <span class="detail show-for-small">
+              Τελευταία ανανέωση: τώρα
+            </span>
+          </li>
+        </a>
+        {% endfor %}
+      </ul>
     </div>
-    <div class="form-group">
-      {{ field_with_attrs(comment_form.text, placeholder="Σχόλιο",
-                          required="true",
-                          rows="2", class="form-control") }}
-
-    </div>
-    <div class="align-right">
-      <input id="id_submit" type="submit" class="btn btn-success" value="Save">
-    </div>
-  </form>
-</div>
-
-<ul id="topic-list" class="list-group">
-  {% for topic in topics %}
-  <li class="list-group-item tc-item" data-id="{{ topic.id }}">
-    <a class="item-link" href="{{ url('comments', topic.id) }}">
-      <div>
-        <img id="avatar" src="{{ topic.creator.get_avatar_url() }}">
-        <span class="badge pull-right">{{ topic.comments.count() }}</span>
-        <div id="creator">
-          {{ topic.creator.full_name|default(topic.creator.email, true) }}
-          <span id="datetime">on {{ topic.created.strftime('%d/%M/%Y') }}</span>
-        </div>
-        {{ topic.subject }}
+  </div>
+  <br/>
+  {% if is_paginated %}
+    <div class="row">
+      <div class="large-3 small-6 columns 
+                  {% if page_obj.has_next %} whitebg {% endif %} 
+                  topbottom-padding">
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">
+            <span class="fi-arrow-left"></span>
+            Παλιό πράμα
+          </a>
+        {% endif %}
       </div>
-    </a>
-  </li>
-  {% endfor %}
-
-</ul>
-
-{% endblock %}
+      <div class="large-3 large-offset-6 small-6 columns 
+                  {% if page_obj.has_previous %} whitebg {% endif %} topbottom-padding">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}" class="right">
+            Νέο πράμα
+            <span class="fi-arrow-right"></span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock main_content %}

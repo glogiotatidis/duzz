@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load browserid %}
+
+{% block main_title %}
+  Login
+{% endblock main_title %}
+
+{% block main_content %}
+<div class="row whitebg">
+  <div class="large-12 columns topbottom-padding center">
+    {% browserid_login text='Βουρρρ' color='dark' %}
+  </div>
+</div>
+
+{% endblock main_content %}

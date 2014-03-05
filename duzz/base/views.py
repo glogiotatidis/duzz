@@ -1,27 +1,35 @@
 import json
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import get_object_or_404, redirect, render
 
 from braces.views import LoginRequiredMixin
+from django_browserid.views import Verify
 
-from forms import CommentCreateForm, TopicCreateForm
-from models import Comment, Topic, DuzzUser
+from forms import AttachmentsFormset, CommentForm
+from models import Attachment, Comment, Topic, DuzzUser
 from utils import get_object_or_none
+
+
+class BrowserIDVerify(Verify):
+    def login_failure(self, error=None):
+        messages.error(self.request, 'Nope. Login error.')
+        return super(BrowserIDVerify, self).login_failure(error)
 
 
 def home(request):
     if request.user.is_authenticated():
         return redirect('topics')
-    return render(request, 'base.html')
+    return render(request, 'login.html')
 
 
 class ProfileUpdate(UpdateView):
     model = DuzzUser
-    fields = ['full_name']
+    fields = ['full_name', 'avatar']
     template_name = 'profile.html'
 
     def get_object(self):
@@ -67,60 +75,61 @@ class Topics(LoginRequiredMixin, ListView):
     model = Topic
     template_name = 'topics.html'
     context_object_name = 'topics'
+    paginate_by = 5
+
+
+class TopicCreate(LoginRequiredMixin, CreateView):
+    model = Topic
+    fields = ['subject']
+    template_name = 'add.html'
+
+    def form_valid(self, form):
+        # Topic form is valid, no validate comment form
+        comment_form = CommentForm(self.request.POST)
+        if not comment_form.is_valid():
+            return self.form_invalid()
+
+        form.instance.creator = self.request.user
+        topic = form.save()
+        comment_form.instance.topic = topic
+        comment_form.instance.creator = self.request.user
+        comment_form.save()
+
+        return HttpResponseRedirect(topic.get_absolute_url())
 
     def get_context_data(self, **kwargs):
-        context = super(Topics, self).get_context_data(**kwargs)
-        context['topic_form'] = TopicCreateForm()
-        context['comment_form'] = CommentCreateForm()
+        context = super(TopicCreate, self).get_context_data(**kwargs)
+        context['comment_form'] = CommentForm()
         return context
 
 
-class Comments(LoginRequiredMixin, ListView):
+class Comments(LoginRequiredMixin, CreateView, ListView):
     model = Comment
-    template_name = 'comments.html'
+    template_name = 'detail.html'
     context_object_name = 'comments'
+    form_class = CommentForm
 
     def get(self, request, *args, **kwargs):
-        if request.is_ajax():
-            self.template_name = 'comment_include.html'
         return super(Comments, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
         topic = get_object_or_404(Topic, pk=self.kwargs['topic_id'])
-        after_id = self.request.GET.get('after', 0)
-        return Comment.objects.filter(topic=topic, id__gt=after_id)
+        return Comment.objects.filter(topic=topic)
 
     def get_context_data(self, **kwargs):
         context = super(Comments, self).get_context_data(**kwargs)
-        context['comment_form'] = CommentCreateForm()
+        context['comment_form'] = CommentForm()
+        context['attachments_formset'] = AttachmentsFormset()
         context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
         return context
 
-
-class CommentCreate(LoginRequiredMixin, AjaxableResponseMixin, CreateView):
-    model = Comment
-    form_class = CommentCreateForm
-
-    def get(self, request, topic_id):
-        return redirect('comments', topic_id=topic_id)
-
-    def get_success_url(self):
-        self.kwargs['topic_id'] = self.topic.id
-        return reverse('comments', kwargs=self.kwargs)
-
     def form_valid(self, form):
-        user = self.request.user
-        if 'topic_id' in self.kwargs:
-            self.topic = get_object_or_none(Topic, pk=self.kwargs['topic_id'])
-        else:
-            topic = Topic(creator=self.request.user)
-            self.topic_form = TopicCreateForm(self.request.POST, instance=topic)
-            if not self.topic_form.is_valid():
-                print "Invalid!"
-                raise
-            self.topic = self.topic_form.save()
+        topic = get_object_or_404(Topic, pk=self.kwargs['topic_id'])
+        form.instance.topic = topic
+        form.instance.creator = self.request.user
+        comment = form.save()
+        attachments_formset = AttachmentsFormset(
+            self.request.POST, self.request.FILES, instance=comment)
+        # attachments_formset.save()
 
-        form.instance.creator = user
-        form.instance.topic = self.topic
-
-        return super(CommentCreate, self).form_valid(form)
+        return HttpResponseRedirect(topic.get_absolute_url())

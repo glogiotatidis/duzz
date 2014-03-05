@@ -1,22 +1,28 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load thumbnail %}
 
-{% block maincontent %}
-<h1>Profile</h1>
+{% block main_title %}
+  Προφίλ
+{% endblock main_title %}
 
-<form id="comment-form" method="POST" role="form">
-  {{ csrf() }}
+{% block active_menu_item %}menu-profiley{% endblock active_menu_item %}
 
-  <div class="form-group">
-    <label for="id_full_name">{{ form.full_name.label }}</label>
-    {{ field_with_attrs(form.full_name, placeholder="Νίκος Κούκος",
-                        size="60",
-                        required="true", class="form-control") }}
+{% block main_content %}
+  <div class="row whitebg">
+    <div class="large-3 columns topbottom-padding center">
+      {% thumbnail user.avatar "256x256" crop="center" formatb="PNG" quality=85 as im %}
+        <img src="{{ im.url }}">
+      {% endthumbnail %}
+    </div>
+    <div class="large-9 columns topbottom-padding">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="radius success small right fi.arrow-left">
+          <span class="fi-check"></span>
+          Σώσε
+        </button>
+      </form>
+    </div>
   </div>
-
-  <div class="align-right">
-    <input id="id_submit" type="submit" class="btn btn-success" value="Save">
-  </div>
-</form>
-
-
-{% endblock %}
+{% endblock main_content %}

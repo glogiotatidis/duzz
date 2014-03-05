@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block main_title %}
+  Νέα τρόμπα
+{% endblock main_title %}
+
+{% block active_menu_item %}menu-new{% endblock active_menu_item %}
+
+{% block main_content %}
+  <div class="row whitebg">
+    <div class="large-12 columns topbottom-padding">
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ comment_form.as_p }}
+        <button class="radius success small right fi.arrow-left">
+          <span class="fi-check"></span>
+          Νιώθω σίγουρος 
+        </button>
+      </form>
+    </div>
+  </div>
+{% endblock main_content %}

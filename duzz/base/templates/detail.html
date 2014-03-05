@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+
+{% block main_title %}
+  {{ topic.subject }}
+{% endblock main_title %}
+
+{% block main_content %}
+  <div class="row whitebg">
+    <div class="large-12 columns topbottom-padding">
+      <ul id="trompa-listing" class="no-bullet">
+        {% for comment in comments %}
+          <li>
+            {% thumbnail topic.creator.avatar "70x70" crop="center" formatb="PNG" quality=99 as im %}
+              <img class="avatar" src="{{ im.url }}">
+            {% endthumbnail %}
+            <h5>{{ comment.creator.full_name }} <span class="detail">{{ comment.created }}</span></h5>
+            {{ comment.text }}
+            {% for attachment in comment.attachments.all %}
+              {% thumbnail attachment.content "256" crop="center" formatb="PNG" quality=99 as im %}
+                <img class="attachment" src="{{ im.url }}">
+              {% endthumbnail %}
+            {% endfor %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="row whitebg">
+    <div class="large-12 columns">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        {{ attachments_formset.as_p }}
+        {{ attachments_formset.management_form }}
+        <button class="radius success small right fi.arrow-left">
+          <span class="fi-check"></span>
+          Νιώθω σίγουρος 
+        </button>
+      </form>
+    </div>
+  </div>
+  <br/>
+{% endblock main_content %}

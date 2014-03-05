@@ -39,12 +39,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = 'media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -76,7 +76,6 @@ SECRET_KEY = '_f&h41k4+wf5-p21anibeq^o4*$sz9w+nz2om7@5dv=epayy7z'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'jingo.Loader',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
@@ -113,9 +112,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
 
     'south',
-    'bootstrap',
-    'jquery',
+    'foundation',
     'django_browserid',
+    'sorl.thumbnail',
 
     'duzz.base',
 )
@@ -153,7 +152,6 @@ LOGGING = {
 
 AUTH_USER_MODEL = 'base.DuzzUser'
 APPEND_SLASH = True
-JINGO_EXCLUDE_APPS = ('admin', 'browserid')
 GRAVATAR_URL = 'https://secure.gravatar.com/avatar/'
 
 AUTHENTICATION_BACKENDS = (
@@ -176,5 +174,12 @@ LOGIN_REDIRECT_URL = reverse_lazy('topics')
 LOGIN_REDIRECT_URL_FAILURE = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('home')
 BROWSERID_CREATE_USER = False
+BROWSERID_VERIFY_CLASS = 'duzz.base.views.BrowserIDVerify'
+
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL_FAILURE = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 
 from local import *
