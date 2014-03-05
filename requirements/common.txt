@@ -2,4 +2,5 @@ django
 south
 django-browserid
 django-braces
+uwsgi
 -e git+https://github.com/mariocesar/sorl-thumbnail#egg=sorl-thumbnail
