@@ -3,4 +3,7 @@ south
 django-browserid
 django-braces
 uwsgi
+dj-database-url==0.2.2
+gunicorn==18.0
+psycopg2==2.5.2
 -e git+https://github.com/mariocesar/sorl-thumbnail#egg=sorl-thumbnail

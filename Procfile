@@ -1,1 +1,1 @@
-web: uwsgi duzz.wsgi
+web: gunicorn duzz.wsgi
