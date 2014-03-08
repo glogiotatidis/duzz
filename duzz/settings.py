@@ -193,5 +193,7 @@ import dj_database_url
 if dj_database_url.config():
     DATABASES = {'default':  dj_database_url.config()}
 
-SITE_URL = 'http://127.0.0.1:8000'
+SITE_URL = ('http://127.0.0.1:8000',
+            'http://duzz.dk.sealabs.net',
+            )
 
