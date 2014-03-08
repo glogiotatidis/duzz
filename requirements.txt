@@ -7,3 +7,4 @@ dj-database-url
 psycopg2
 -e git+https://github.com/mariocesar/sorl-thumbnail#egg=sorl-thumbnail
 dj-static
+django-zurb-foundation
