@@ -1,1 +1,9 @@
--r requirements/common.txt
+django
+south
+django-browserid
+django-braces
+uwsgi
+dj-database-url
+psycopg2
+-e git+https://github.com/mariocesar/sorl-thumbnail#egg=sorl-thumbnail
+dj-static

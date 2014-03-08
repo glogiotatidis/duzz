@@ -1,1 +1,2 @@
-web: gunicorn duzz.wsgi
+web: uwsgi --http :5000 --wsgi-file duzz/wsgi.py
+

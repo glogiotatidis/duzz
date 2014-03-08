@@ -182,4 +182,16 @@ LOGIN_REDIRECT_URL_FAILURE = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
-from local import *
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'duzz.db',
+    }
+}
+
+import dj_database_url
+if dj_database_url.config():
+    DATABASES = {'default':  dj_database_url.config()}
+
+SITE_URL = 'http://127.0.0.1:8000'
+
