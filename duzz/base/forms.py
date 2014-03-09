@@ -15,5 +15,9 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['text']
 
-AttachmentsFormset = inlineformset_factory(Comment, Attachment, extra=1)
+
+class AttachmentForm(forms.ModelForm):
+    class Meta:
+        model = Attachment
+        fields = ['content']
 

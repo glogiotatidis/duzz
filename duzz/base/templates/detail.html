@@ -15,12 +15,16 @@
               <img class="avatar" src="{{ im.url }}">
             {% endthumbnail %}
             <h5>{{ comment.creator.full_name }} <span class="detail">{{ comment.created }}</span></h5>
-            {{ comment.text }}
-            {% for attachment in comment.attachments.all %}
-              {% thumbnail attachment.content "256" crop="center" formatb="PNG" quality=99 as im %}
-                <img class="attachment" src="{{ im.url }}">
-              {% endthumbnail %}
-            {% endfor %}
+            <p>
+              {{ comment.text }}
+            </p>
+            <p>
+              {% for attachment in comment.attachments.all %}
+                {% thumbnail attachment.content "256" crop="center" formatb="PNG" quality=99 as im %}
+                  <img class="attachment" src="{{ im.url }}">
+                {% endthumbnail %}
+              {% endfor %}
+             </p>
           </li>
         {% endfor %}
       </ul>
@@ -31,8 +35,7 @@
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ comment_form.as_p }}
-        {{ attachments_formset.as_p }}
-        {{ attachments_formset.management_form }}
+        {{ attachment_form.as_p }}
         <button class="radius success small right fi.arrow-left">
           <span class="fi-check"></span>
           Νιώθω σίγουρος 

@@ -26,18 +26,25 @@ body {
 #trompa-listing li {
     clear: both;
     min-height: 100px;
+    
 }
 
+#trompa-listing p {
+    font-weight: 300;
+    font-size: 85%;
+    margin-left: 65px;
+}
 img.attachment {
 
 }
 
 #trompa-listing li img.avatar {
-    width: 70px;
-    border-radius: 15px;
+    width: 60px;
+    border-radius: 5px;
     vertical-align: top;
     margin-right: 5px;
     float: left;
+
 }
 
 #trompa-listing li h5 {
@@ -45,10 +52,6 @@ img.attachment {
     line-height: 1.1;
 }
 
-#trompa-listing li h5 #time {
-    color: #cecece;
-    font-size: small;
-}
 
 .more-detail {
     font-size: small;

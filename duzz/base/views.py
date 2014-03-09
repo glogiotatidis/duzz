@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from braces.views import LoginRequiredMixin
 from django_browserid.views import Verify
 
-from forms import AttachmentsFormset, CommentForm
+from forms import AttachmentForm, CommentForm
 from models import Attachment, Comment, Topic, DuzzUser
 from utils import get_object_or_none
 
@@ -119,7 +119,7 @@ class Comments(LoginRequiredMixin, CreateView, ListView):
     def get_context_data(self, **kwargs):
         context = super(Comments, self).get_context_data(**kwargs)
         context['comment_form'] = CommentForm()
-        context['attachments_formset'] = AttachmentsFormset()
+        context['attachment_form'] = AttachmentForm()
         context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
         return context
 
@@ -128,8 +128,9 @@ class Comments(LoginRequiredMixin, CreateView, ListView):
         form.instance.topic = topic
         form.instance.creator = self.request.user
         comment = form.save()
-        attachments_formset = AttachmentsFormset(
-            self.request.POST, self.request.FILES, instance=comment)
-        # attachments_formset.save()
+        attachment_form = AttachmentForm(self.request.POST, self.request.FILES)
+        attachment_form.instance.comment = comment
+        if attachment_form.is_valid():
+            attachment_form.save()
 
         return HttpResponseRedirect(topic.get_absolute_url())
