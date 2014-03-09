@@ -6,7 +6,7 @@ uwsgi
 dj-database-url
 psycopg2
 -e git+https://github.com/mariocesar/sorl-thumbnail#egg=sorl-thumbnail
-dj-static
+-e git+https://github.com/kennethreitz/dj-static/#egg=dj-static
 django-zurb-foundation
 jingo==0.6.1
 pillow
